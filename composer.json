@@ -1,6 +1,6 @@
 {
     "name": "netzindianer/laravel-file-notifier",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Notify chosen services when specified file changes",
     "require": {
         "xtompie/result": "^1.2",
@@ -19,8 +19,10 @@
         }
     ],
     "extra": {
-        "providers": [
-            "Netzindianer\\FileNotifier\\FileNotifierProvider"
-        ]
+        "laravel": {
+            "providers": [
+                "Netzindianer\\FileNotifier\\FileNotifierProvider"
+            ]
+        }
     }
 }
