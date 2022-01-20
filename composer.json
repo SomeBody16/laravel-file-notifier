@@ -1,0 +1,26 @@
+{
+    "name": "netzindianer/laravel-file-notifier",
+    "version": "1.0.0",
+    "description": "Notify chosen services when specified file changes",
+    "require": {
+        "xtompie/result": "^1.2",
+        "laravel/framework": "8.*"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Netzindianer\\FileNotifier\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Filip Nowakowski",
+            "email": "f.nowakowski2000@gmail.com"
+        }
+    ],
+    "extra": {
+        "providers": [
+            "Netzindianer\\FileNotifier\\FileNotifierProvider"
+        ]
+    }
+}
