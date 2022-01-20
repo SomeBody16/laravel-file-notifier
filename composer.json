@@ -3,6 +3,7 @@
     "version": "1.0.1",
     "description": "Notify chosen services when specified file changes",
     "require": {
+        "php": ">=8.0",
         "xtompie/result": "^1.2",
         "laravel/framework": "8.*"
     },
