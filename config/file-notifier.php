@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'fileName' => '',
-    'seconds' => 0,
+    'fileName' => storage_path('logs/laravel.log'),
+    'seconds' => 3600,
     'lines' => 300,
 
     'email' => [
