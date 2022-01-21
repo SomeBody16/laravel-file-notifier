@@ -23,6 +23,7 @@ class DiscordNotifierDefaultCommand extends Command
 
     public function handle(): int
     {
-        return ($this->notifier)()->value();
+        ($this->notifier)();
+        return 0;
     }
 }

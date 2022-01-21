@@ -19,7 +19,7 @@ class EmailNotifier
         int $seconds,
         int $lines,
         array $emails,
-        ?string $customSubject = null,
+        ?string $subject = null,
     ): Result
     {
         return ($this->fileNotifier)(
@@ -27,7 +27,7 @@ class EmailNotifier
             seconds: $seconds,
             sender: $this->sender
                 ->emails($emails)
-                ->customSubject($customSubject),
+                ->subject($subject),
             lines: $lines,
         );
     }

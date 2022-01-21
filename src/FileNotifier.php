@@ -26,13 +26,13 @@ class FileNotifier
         }
 
         $content = $this->readLastLines($fileName, $lines);
-        if (is_callable($sender)) {
+        try {
             return Result::ofValue(
                 $sender($content, $fileName)
             );
         }
-        else {
-            return Result::ofErrorMsg("Sender is not callable");
+        catch (\Exception $e) {
+            return Result::ofErrorMsg($e->getMessage());
         }
     }
 

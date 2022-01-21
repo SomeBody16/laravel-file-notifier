@@ -16,14 +16,13 @@ class EmailNotifierSender
         protected Mailer $mailer,
     ) {}
 
-    public function __invoke(string $content, string $fileName): int
+    public function __invoke(string $content, string $fileName): void
     {
         $this->mailer->raw($content, function(Message $message) use($fileName) {
             $message
                 ->to($this->emails)
                 ->subject($this->customSubject ?? "[Email Notifier] $fileName");
         });
-        return 0;
     }
 
     public function emails(array $emails): static
@@ -32,9 +31,9 @@ class EmailNotifierSender
         return $this;
     }
 
-    public function customSubject(string $customSubject): static
+    public function subject(string $subject): static
     {
-        $this->customSubject = $customSubject;
+        $this->customSubject = $subject;
         return $this;
     }
 

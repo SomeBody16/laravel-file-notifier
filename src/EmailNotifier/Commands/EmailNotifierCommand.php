@@ -28,13 +28,13 @@ class EmailNotifierCommand extends Command
 
     public function handle(): int
     {
-        return ($this->notifier)(
+        ($this->notifier)(
             fileName: $this->option('file-name'),
             seconds: (int)$this->option('seconds'),
             lines: (int)$this->option('lines'),
             emails: $this->option('email'),
-            customSubject: $this->hasOption('subject') ? $this->option('subject') : null,
-        )
-            ->value();
+            subject: $this->hasOption('subject') ? $this->option('subject') : null,
+        );
+        return 0;
     }
 }

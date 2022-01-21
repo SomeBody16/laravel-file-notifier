@@ -10,6 +10,7 @@ return [
             'example@mail.com',
             'another@example.org',
         ],
+        'subject' => env('APP_NAME', 'Discord Notifier') . ' - laravel.log',
     ],
 
     // https://discord.com/developers/docs/resources/webhook#execute-webhook

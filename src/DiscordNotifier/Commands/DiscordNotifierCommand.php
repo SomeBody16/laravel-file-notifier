@@ -29,14 +29,14 @@ class DiscordNotifierCommand extends Command
 
     public function handle(): int
     {
-        return ($this->notifier)(
+        ($this->notifier)(
             fileName: $this->option('file-name'),
             seconds: (int)$this->option('seconds'),
             lines: (int)$this->option('lines'),
             webhookId: $this->option('webhook-id'),
             webhookToken: $this->option('webhook-token'),
             message: $this->option('message'),
-        )
-            ->value();
+        );
+        return 0;
     }
 }

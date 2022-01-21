@@ -17,15 +17,12 @@ class EmailNotifierDefault
 
     public function __invoke(): Result
     {
-        $appName = $this->config->get('app.name');
-        $fileName = $this->config->get("file-notifier.fileName");
-
         return ($this->notifier)(
-            fileName: $fileName,
+            fileName: $this->config->get("file-notifier.fileName"),
             seconds: $this->config->get('file-notifier.seconds'),
             lines: $this->config->get('file-notifier.lines'),
             emails: $this->config->get('file-notifier.email.emails'),
-            customSubject: "[$appName] $fileName",
+            subject: $this->config->get('file-notifier.email.subject'),
         );
     }
 
