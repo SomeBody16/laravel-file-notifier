@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netzindianer\FileNotifier\EmailNotifier;
 
 use Netzindianer\FileNotifier\FileNotifier;
+use Netzindianer\FileNotifier\FileNotifierLog;
 use Xtompie\Result\Result;
 
 class EmailNotifier
@@ -22,6 +23,7 @@ class EmailNotifier
         ?string $subject = null,
     ): Result
     {
+        FileNotifierLog::debug("EmailNotifier::__invoke", ['emails' => $emails, 'subject' => $subject]);
         return ($this->fileNotifier)(
             fileName: $fileName,
             seconds: $seconds,

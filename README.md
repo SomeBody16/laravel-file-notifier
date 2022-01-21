@@ -194,3 +194,10 @@ class SendNewLogsToDevelopersUtil
 ```
 
 All notifiers in this package returns [xtompie results](https://packagist.org/packages/xtompie/result) without value or with error
+
+## Debug
+
+When you turn on `debug` in config, information about what is happening will be printed to `logs/file-notifier.debug.log`
+in your `storage_path()`
+
+You can use this to for example, check response from discord if it's returns valid response or any errors

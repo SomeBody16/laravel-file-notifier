@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'debug' => false,
     'fileName' => storage_path('logs/laravel.log'),
     'seconds' => 3600,
     'lines' => 300,

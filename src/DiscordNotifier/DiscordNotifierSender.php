@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Netzindianer\FileNotifier\DiscordNotifier;
 
 use Illuminate\Http\Client\Factory as HttpFactory;
+use Netzindianer\FileNotifier\FileNotifierLog;
 
 class DiscordNotifierSender
 {
@@ -18,11 +19,17 @@ class DiscordNotifierSender
 
     public function __invoke(string $content, string $fileName): void
     {
-        $this->http
-            ->attach('payload_json', json_encode($this->message), null, ['Content-Type' => 'application/json'])
-            ->attach('files[0]', $content, $fileName, ['Content-Type' => 'text/plain'])
-            ->post("https://discord.com/api/v9/webhooks/{$this->webhookId}/{$this->webhookToken}")
-            ->throw();
+        try {
+            $response = $this->http
+                ->attach('payload_json', json_encode($this->message), null, ['Content-Type' => 'application/json'])
+                ->attach('files[0]', $content, $fileName, ['Content-Type' => 'text/plain'])
+                ->post("https://discord.com/api/v9/webhooks/{$this->webhookId}/{$this->webhookToken}?wait=true")
+                ->throw();
+            FileNotifierLog::debug("Response body of webhook: " . $response->body());
+        } catch (\Exception $e) {
+            FileNotifierLog::debug("Error while sending webhook", ['error' => $e->getMessage(), 'code' => $e->getCode()]);
+            throw $e;
+        }
     }
 
     public function webhook(string $id, string $token): static
