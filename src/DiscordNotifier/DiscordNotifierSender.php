@@ -18,11 +18,14 @@ class DiscordNotifierSender
 
     public function __invoke(string $content, string $fileName): void
     {
-        $this->http
+        $response = $this->http
             ->attach('payload_json', json_encode($this->message), null, ['Content-Type' => 'application/json'])
             ->attach('files[0]', $content, $fileName, ['Content-Type' => 'text/plain'])
-            ->post("https://discord.com/api/v9/webhooks/{$this->webhookId}/{$this->webhookToken}?wait=true")
-            ->throw();
+            ->post("https://discord.com/api/v9/webhooks/{$this->webhookId}/{$this->webhookToken}?wait=true");
+
+        if ($response->failed()) {
+            throw new \Exception($response->body(), $response->status());
+        }
     }
 
     public function webhook(string $id, string $token): static

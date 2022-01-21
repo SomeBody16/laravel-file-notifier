@@ -40,8 +40,7 @@ class DiscordNotifierCommand extends Command
         );
 
         $result->ifFail(function(Result $result) {
-            $this->error("Error while sending mail");
-            dump($result->errors()->toArray());
+            $this->error($result->errors()->first()->message());
         });
 
         $result->ifSuccess(function() {
