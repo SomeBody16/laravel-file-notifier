@@ -6,6 +6,7 @@ namespace Netzindianer\FileNotifier\DiscordNotifier\Commands;
 
 use Illuminate\Console\Command;
 use Netzindianer\FileNotifier\DiscordNotifier\DiscordNotifier;
+use Xtompie\Result\Result;
 
 class DiscordNotifierCommand extends Command
 {
@@ -29,7 +30,7 @@ class DiscordNotifierCommand extends Command
 
     public function handle(): int
     {
-        ($this->notifier)(
+        $result = ($this->notifier)(
             fileName: $this->option('file-name'),
             seconds: (int)$this->option('seconds'),
             lines: (int)$this->option('lines'),
@@ -37,6 +38,15 @@ class DiscordNotifierCommand extends Command
             webhookToken: $this->option('webhook-token'),
             message: $this->option('message'),
         );
+
+        $result->ifFail(function(Result $result) {
+            $this->error($result->errors()->first()->message());
+        });
+
+        $result->ifSuccess(function() {
+            $this->info("Email successfully sent to recipients");
+        });
+
         return 0;
     }
 }

@@ -6,6 +6,7 @@ namespace Netzindianer\FileNotifier\EmailNotifier\Commands;
 
 use Illuminate\Console\Command;
 use Netzindianer\FileNotifier\EmailNotifier\EmailNotifierDefault;
+use Xtompie\Result\Result;
 
 class EmailNotifierDefaultCommand extends Command
 {
@@ -23,7 +24,16 @@ class EmailNotifierDefaultCommand extends Command
 
     public function handle(): int
     {
-        ($this->notifier)();
+        $result = ($this->notifier)();
+
+        $result->ifFail(function(Result $result) {
+            $this->error($result->errors()->first()->message());
+        });
+
+        $result->ifSuccess(function() {
+            $this->info("Email successfully sent to recipients");
+        });
+
         return 0;
     }
 }
