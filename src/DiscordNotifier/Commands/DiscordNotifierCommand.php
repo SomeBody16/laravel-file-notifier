@@ -44,7 +44,7 @@ class DiscordNotifierCommand extends Command
         });
 
         $result->ifSuccess(function() {
-            $this->info("Message successfully sent to recipients");
+            $this->info("Message successfully sent to channel");
         });
 
         return 0;

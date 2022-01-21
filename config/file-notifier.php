@@ -16,23 +16,16 @@ return [
     // https://discord.com/developers/docs/resources/webhook#execute-webhook
     'discord' => [
         'webhook' => [
-            'id' => 'WEBHOOK_ID',
-            'token' => 'WEBHOOK_TOKEN',
+            'id' => env('DISCORD_NOTIFIER_WEBHOOK_ID'),
+            'token' => env('DISCORD_NOTIFIER_WEBHOOK_TOKEN'),
         ],
         'message' => [
-            'content' => '@everyone',
+            'content' => '<@326629196967313408>',
             'allowed_mentions' => [
-                'parse' => ['everyone']
+                'parse' => ['users'],
             ],
             'username' => env('APP_NAME', 'Discord Notifier'),
-            'components' => [
-                [
-                    'type' => 2,
-                    'style' => 5,
-                    'label' => 'Home Page',
-                    'url' => env('APP_URL'),
-                ]
-            ],
+            'avatar_url' => 'https://avatars.dicebear.com/api/bottts/'. urlencode(env('APP_NAME', 'Discord Notifier')) .'.png',
         ],
     ],
 ];
