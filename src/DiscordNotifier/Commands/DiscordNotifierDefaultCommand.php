@@ -30,8 +30,9 @@ class DiscordNotifierDefaultCommand extends Command
             $this->error($result->errors()->first()->message());
         });
 
-        $result->ifSuccess(function() {
-            $this->info("Message successfully sent to recipients");
+        $result->ifFail(function(Result $result) {
+            $this->error("Error while sending mail");
+            dump($result->errors()->toArray());
         });
 
         return 0;

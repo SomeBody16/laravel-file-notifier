@@ -21,9 +21,7 @@ class FileNotifier
         callable $sender,
         int $lines,
     ): Result {
-        FileNotifierLog::debug("FileNotifier::__invoke", ['fileName' => $fileName, 'seconds' => $seconds, 'lines' => $lines]);
         if (!file_exists($fileName) || filemtime($fileName) < time() - $seconds) {
-            FileNotifierLog::debug("File not exists", ['fileName' => $fileName]);
             return Result::ofValue(-1);
         }
 
@@ -34,7 +32,6 @@ class FileNotifier
             );
         }
         catch (\Exception $e) {
-            FileNotifierLog::debug("Error occurred in sender", ['error' => $e->getMessage()]);
             return Result::ofErrorMsg($e->getMessage());
         }
     }

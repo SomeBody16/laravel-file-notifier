@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Netzindianer\FileNotifier\DiscordNotifier;
 
 use Netzindianer\FileNotifier\FileNotifier;
-use Netzindianer\FileNotifier\FileNotifierLog;
 use Xtompie\Result\Result;
 
 class DiscordNotifier
@@ -24,7 +23,6 @@ class DiscordNotifier
         array $message,
     ): Result
     {
-        FileNotifierLog::debug("DiscordNotifier::__invoke", ['message' => $message]);
         return ($this->fileNotifier)(
             fileName: $fileName,
             seconds: $seconds,
