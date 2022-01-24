@@ -163,7 +163,7 @@ class HttpPostNotifierSender
 
 ### Emails from database
 
-If you want, for example, call `file-notifier:email` but want to read emails from database, classes works exactly as above,
+If you want, for example, call `file-notifier:email` but read addresses from database, api works exactly as above,
 so for emails you could do this:
 
 ```php
@@ -176,7 +176,7 @@ class SendNewLogsToDevelopersUtil
     public function __construct(
         protected EmailNotifier $emailNotifier,
     ) {}
-    
+
     public function __invoke(): Result
     {
         $users = User::where('is_developer', true)->get();
