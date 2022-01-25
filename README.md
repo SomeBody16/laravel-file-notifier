@@ -1,6 +1,9 @@
 # File Notifier
 
 ![Packagist Version](https://img.shields.io/packagist/v/netzindianer/laravel-file-notifier?label=Version&style=for-the-badge)
+![GitHub](https://img.shields.io/github/license/netzindianer/laravel-file-notifier?style=for-the-badge)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/netzindianer/laravel-file-notifier/master?style=for-the-badge)
+
 
 ## Installation
 
@@ -10,6 +13,37 @@ php artisan vendor:publish --provider="Netzindianer\FileNotifier\FileNotifierPro
 ```
 
 ## Usage
+
+### Default
+
+This module will check `config/file-notifier.php`, and if it finds config for any of senders, it will execute them
+
+#### Command
+
+```shell
+php artisan file-notifier:default
+```
+
+#### CRON
+
+```shell
+0 * * * * php artisan file-notifier:default >> /var/log/my_laravel_app_file_notifier.log
+```
+
+#### Laravel Schedule
+
+[Documentation](https://laravel.com/docs/8.x/scheduling)
+
+```php
+// Kernel.php
+protected function schedule(Schedule $schedule)
+{
+    $schedule
+        ->command('file-notifier:default')
+        ->hourly()
+        ->appendOutputTo(storage_path('logs/file-notifier.log'));
+}
+```
 
 ### Email
 
@@ -27,16 +61,10 @@ php artisan file-notifier:email \
   --subject="My Laravel App - laravel.log"
 ```
 
-Or you can call `file-notifier:email:default` to read parameters from `config/file-notifier.php`
-
-```shell
-php artisan file-notifier:email:default
-```
-
 #### CRON
 
 ```shell
-0 * * * * php artisan file-notifier:email:default >> /var/log/my_laravel_app_file_notifier.error.log
+0 * * * * php artisan file-notifier:email --file-name=/var/www/html/storage/logs/laravel.log --seconds=3600 --lines=300 --email=example@email.com --email=another@email.com --subject="My Laravel App - laravel.log" >> /var/log/my_laravel_app_file_notifier.log
 ```
 
 #### Laravel Schedule
@@ -48,7 +76,14 @@ php artisan file-notifier:email:default
 protected function schedule(Schedule $schedule)
 {
     $schedule
-        ->command('file-notifier:email:default')
+        ->command('file-notifier:email', [
+            '--file-name', '/var/www/html/storage/logs/laravel.log',
+            '--seconds', '3600',
+            '--lines', '300',
+            '--email', 'example@email.com',
+            '--email', 'another@email.com',
+            '--subject', 'My Laravel App - laravel.log'
+        ])
         ->hourly()
         ->appendOutputTo(storage_path('logs/file-notifier.log'));
 }
@@ -66,21 +101,15 @@ php artisan file-notifier:discord \
   --file-name=/var/www/html/storage/logs/laravel.log \
   --seconds=3600 \
   --lines=300 \
-  --webhook-id=000000000000000000
-  --webhook-token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  --webhook-id=000000000000000000 \
+  --webhook-token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX \
   --message="{\"username\":\"My Laravel App\",\"content\":\"laravel.log\"}"
-```
-
-Or you can call `file-notifier:discord:default` to read parameters from `config/file-notifier.php`
-
-```shell
-php artisan file-notifier:discord:default
 ```
 
 #### CRON
 
 ```shell
-0 * * * * php artisan file-notifier:discord:default >> /var/log/my_laravel_app_file_notifier.error.log
+0 * * * * php artisan file-notifier:discord --file-name=/var/www/html/storage/logs/laravel.log --seconds=3600 --lines=300 --webhook-id=000000000000000000 --webhook-token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX --message="{\"username\":\"My Laravel App\",\"content\":\"laravel.log\"}" >> /var/log/my_laravel_app_file_notifier.log
 ```
 
 #### Laravel Schedule
@@ -92,7 +121,14 @@ php artisan file-notifier:discord:default
 protected function schedule(Schedule $schedule)
 {
     $schedule
-        ->command('file-notifier:discord:default')
+        ->command('file-notifier:discord', [
+            '--file-name', '/var/www/html/storage/logs/laravel.log',
+            '--seconds', '3600',
+            '--lines', '300',
+            '--webhook-id', '000000000000000000',
+            '--webhook-token', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+            '--message', '{"username":"My Laravel App","content":"laravel.log"}',
+        ])
         ->hourly()
         ->appendOutputTo(storage_path('logs/file-notifier.log'));
 }
@@ -167,14 +203,16 @@ If you want, for example, call `file-notifier:email` but read addresses from dat
 so for emails you could do this:
 
 ```php
-use \Netzindianer\FileNotifier\EmailNotifier\EmailNotifier;
+use \Netzindianer\FileNotifier\FileNotifier;
+use \Netzindianer\FileNotifier\Email\EmailSender;
 use \App\Models\User;
 use Xtompie\Result\Result;
 
 class SendNewLogsToDevelopersUtil
 {
     public function __construct(
-        protected EmailNotifier $emailNotifier,
+        protected FileNotifier $notifier,
+        protected EmailSender $emailSender,
     ) {}
 
     public function __invoke(): Result
@@ -182,12 +220,13 @@ class SendNewLogsToDevelopersUtil
         $users = User::where('is_developer', true)->get();
         $emails = $users->map(fn(User $user) => $user->email);
 
-        return ($this->emailNotifier)(
+        return ($this->notifier)(
             fileName: storage_path('logs/laravel.log'),
             seconds: 3600,
+            sender: $this->emailSender
+                ->emails($emails)
+                ->subject("New logs for developers")
             lines: 300,
-            emails: $emails,
-            subject: "New logs for developers",
         );
     }
 }

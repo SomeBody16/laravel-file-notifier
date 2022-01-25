@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Netzindianer\FileNotifier\EmailNotifier\Commands;
+namespace Netzindianer\FileNotifier\Email;
 
 use Illuminate\Console\Command;
-use Netzindianer\FileNotifier\EmailNotifier\EmailNotifier;
+use Netzindianer\FileNotifier\FileNotifier;
 use Xtompie\Result\Result;
 
-class EmailNotifierCommand extends Command
+class EmailCommand extends Command
 {
     protected $signature = "
         file-notifier:email
@@ -22,7 +22,8 @@ class EmailNotifierCommand extends Command
     protected $description = "Check if there is new content in file and if it is, send emails with last lines of file";
 
     public function __construct(
-        protected EmailNotifier $notifier,
+        protected FileNotifier $notifier,
+        protected EmailSender $sender,
     ) {
         parent::__construct();
     }
@@ -32,9 +33,10 @@ class EmailNotifierCommand extends Command
         $result = ($this->notifier)(
             fileName: $this->option('file-name'),
             seconds: (int)$this->option('seconds'),
+            sender: $this->sender
+                ->emails($this->option('email'))
+                ->subject($this->hasOption('subject') ? $this->option('subject') : null),
             lines: (int)$this->option('lines'),
-            emails: $this->option('email'),
-            subject: $this->hasOption('subject') ? $this->option('subject') : null,
         );
 
         $result->ifFail(function(Result $result) {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Netzindianer\FileNotifier\DiscordNotifier\Commands;
+namespace Netzindianer\FileNotifier\Discord;
 
 use Illuminate\Console\Command;
-use Netzindianer\FileNotifier\DiscordNotifier\DiscordNotifier;
+use Netzindianer\FileNotifier\FileNotifier;
 use Xtompie\Result\Result;
 
-class DiscordNotifierCommand extends Command
+class DiscordCommand extends Command
 {
     protected $signature = "
         file-notifier:discord
@@ -23,7 +23,8 @@ class DiscordNotifierCommand extends Command
     protected $description = "Check if there is new content in file and if it is, send discord message with last lines of file";
 
     public function __construct(
-        protected DiscordNotifier $notifier,
+        protected FileNotifier $notifier,
+        protected DiscordSender $sender,
     ) {
         parent::__construct();
     }
@@ -33,10 +34,13 @@ class DiscordNotifierCommand extends Command
         $result = ($this->notifier)(
             fileName: $this->option('file-name'),
             seconds: (int)$this->option('seconds'),
+            sender: $this->sender
+                ->webhook(
+                    id: $this->option('webhook-id'),
+                    token: $this->option('webhook-token'),
+                )
+                ->message($this->option('message')),
             lines: (int)$this->option('lines'),
-            webhookId: $this->option('webhook-id'),
-            webhookToken: $this->option('webhook-token'),
-            message: $this->option('message'),
         );
 
         $result->ifFail(function(Result $result) {

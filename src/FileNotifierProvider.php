@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Netzindianer\FileNotifier;
 
 use Illuminate\Support\ServiceProvider;
-use Netzindianer\FileNotifier\DiscordNotifier\Commands\DiscordNotifierCommand;
-use Netzindianer\FileNotifier\DiscordNotifier\Commands\DiscordNotifierDefaultCommand;
-use Netzindianer\FileNotifier\EmailNotifier\Commands\EmailNotifierCommand;
-use Netzindianer\FileNotifier\EmailNotifier\Commands\EmailNotifierDefaultCommand;
+use Netzindianer\FileNotifier\Discord\DiscordCommand;
+use Netzindianer\FileNotifier\Email\EmailCommand;
 
 class FileNotifierProvider extends ServiceProvider
 {
@@ -24,10 +22,9 @@ class FileNotifierProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->commands([
-                EmailNotifierCommand::class,
-                EmailNotifierDefaultCommand::class,
-                DiscordNotifierCommand::class,
-                DiscordNotifierDefaultCommand::class,
+                FileNotifierDefaultCommand::class,
+                EmailCommand::class,
+                DiscordCommand::class,
             ]);
         }
     }

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Netzindianer\FileNotifier\EmailNotifier;
+namespace Netzindianer\FileNotifier\Email;
 
 use Illuminate\Mail\Mailer;
 use Illuminate\Mail\Message;
 
-class EmailNotifierSender
+class EmailSender
 {
     protected array $emails;
     protected ?string $customSubject = null;

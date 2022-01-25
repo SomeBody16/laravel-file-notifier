@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Netzindianer\FileNotifier\DiscordNotifier;
+namespace Netzindianer\FileNotifier\Discord;
 
 use Illuminate\Http\Client\Factory as HttpFactory;
 
-class DiscordNotifierSender
+class DiscordSender
 {
     protected string $webhookId;
     protected string $webhookToken;
