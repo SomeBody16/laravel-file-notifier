@@ -50,7 +50,7 @@ class DiscordCommand extends Command
 
         $result->ifSuccess(function(Result $result) {
             if ($result->value() === -1) {
-                $this->info("File is empty or not exists, skipping...");
+                $this->info("File is empty, not exists or nothing changed, skipping...");
             } else {
                 $this->info("Message successfully sent to channel");
             }
