@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netzindianer\FileNotifier;
 
+use Carbon\Carbon;
 use Illuminate\Config\Repository as ConfigRepository;
 use Illuminate\Console\Command;
 use Netzindianer\FileNotifier\Discord\DiscordSender;
@@ -73,4 +74,18 @@ class FileNotifierDefaultCommand extends Command
     {
         return $this->config->get("file-notifier.$key");
     }
+
+    public function info($string, $verbosity = null)
+    {
+        $now = Carbon::now()->toDateTimeString();
+        parent::info("[$now] $string", $verbosity);
+    }
+
+    public function error($string, $verbosity = null)
+    {
+        $now = Carbon::now()->toDateTimeString();
+        parent::error("[$now] $string", $verbosity);
+    }
+
+
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Netzindianer\FileNotifier\Email;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Netzindianer\FileNotifier\FileNotifier;
 use Xtompie\Result\Result;
@@ -48,5 +49,17 @@ class EmailCommand extends Command
         });
 
         return 0;
+    }
+
+    public function info($string, $verbosity = null)
+    {
+        $now = Carbon::now()->toDateTimeString();
+        parent::info("[$now] $string", $verbosity);
+    }
+
+    public function error($string, $verbosity = null)
+    {
+        $now = Carbon::now()->toDateTimeString();
+        parent::error("[$now] $string", $verbosity);
     }
 }
