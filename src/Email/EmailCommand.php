@@ -46,7 +46,7 @@ class EmailCommand extends Command
 
         $result->ifSuccess(function(Result $result) {
             if ($result->value() === -1) {
-                $this->info("File is empty, skipping...");
+                $this->info("File is empty or not exists, skipping...");
             } else {
                 $this->info("Email successfully sent to recipients");
             }

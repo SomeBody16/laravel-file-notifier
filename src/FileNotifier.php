@@ -57,6 +57,7 @@ class FileNotifier
                 $currentLine = $char . $currentLine;
             }
         }
+        $lines[] = $currentLine;
 
         return join("\n", $lines);
     }

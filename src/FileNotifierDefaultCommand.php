@@ -64,7 +64,7 @@ class FileNotifierDefaultCommand extends Command
 
             $result->ifSuccess(function() use($result, $name) {
                 if ($result->value() === -1) {
-                    $this->info("$name: File is empty, skipping...");
+                    $this->info("$name: File is empty or not exists, skipping...");
                 } else {
                     $this->info("Sender '$name' succeed");
                 }
