@@ -62,8 +62,12 @@ class FileNotifierDefaultCommand extends Command
                 $this->error($name . " : " . $result->errors()->first()->message());
             });
 
-            $result->ifSuccess(function() use($name) {
-                $this->info("Sender '$name' succeed");
+            $result->ifSuccess(function(Result $result) use($name) {
+                if ($result->value() === -1) {
+                    $this->info("$name: File is empty, skipping...");
+                } else {
+                    $this->info("Sender '$name' succeed");
+                }
             });
         }
 

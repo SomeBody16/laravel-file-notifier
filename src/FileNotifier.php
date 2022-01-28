@@ -26,6 +26,10 @@ class FileNotifier
         }
 
         $content = $this->readLastLines($fileName, $lines);
+        if (strlen($content) <= 0) {
+            return Result::ofValue(-1);
+        }
+
         try {
             return Result::ofValue(
                 $sender($content, $fileName)

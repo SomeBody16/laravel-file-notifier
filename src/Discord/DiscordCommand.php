@@ -48,8 +48,12 @@ class DiscordCommand extends Command
             $this->error($result->errors()->first()->message());
         });
 
-        $result->ifSuccess(function() {
-            $this->info("Message successfully sent to channel");
+        $result->ifSuccess(function(Result $result) {
+            if ($result->value() === -1) {
+                $this->info("File is empty, skipping...");
+            } else {
+                $this->info("Message successfully sent to channel");
+            }
         });
 
         return 0;

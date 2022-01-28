@@ -44,8 +44,12 @@ class EmailCommand extends Command
             $this->error($result->errors()->first()->message());
         });
 
-        $result->ifSuccess(function() {
-            $this->info("Email successfully sent to recipients");
+        $result->ifSuccess(function(Result $result) {
+            if ($result->value() === -1) {
+                $this->info("File is empty, skipping...");
+            } else {
+                $this->info("Email successfully sent to recipients");
+            }
         });
 
         return 0;

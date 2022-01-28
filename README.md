@@ -232,4 +232,7 @@ class SendNewLogsToDevelopersUtil
 }
 ```
 
-All notifiers in this package returns [xtompie results](https://packagist.org/packages/xtompie/result) without value or with error
+All notifiers in this package returns [xtompie results](https://packagist.org/packages/xtompie/result) with:
+- `-1` if file not exists or there is nothing to send
+- `NULL` if everything went correct
+- Failure with exception message if something went wrong
