@@ -59,7 +59,7 @@ class FileNotifier
         }
         $lines[] = $currentLine;
 
-        return join("\n", $lines);
+        return join("\n", array_reverse($lines));
     }
 
 }
